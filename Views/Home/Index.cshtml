@@ -1,0 +1,222 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+<div class="jumbotron">
+    <main class="px-3">
+
+        <script src="~/Content/prism/prism.js"></script>
+        <link href="~/Content/prism/prism.css" rel="stylesheet" />
+
+        <h1>CommentBox Servisine Hoşgeldiniz.</h1>
+        <p class="lead">Sitenize CommentBox içeriğini kolayca eklemek için aşağıdaki CSS,HTML ve Javascript kodlarını sitenize entegre edin .</p>
+
+
+
+
+        @*-------------------------------------------------------------------*@
+
+        @*Css kod*@
+        <p class="lead">
+            <a class="btn btn-lg btn-secondary fw-bold border-white bg-white">Css </a>
+        </p>
+        <pre><code class="language-css">
+
+    @@import url(//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css);
+
+    .detailBox {
+    width: 320px;
+    border: 1px solid #bbb;
+    margin: 50px;
+    }
+
+    .titleBox {
+    background-color: #fdfdfd;
+    padding: 10px;
+    }
+
+    .titleBox label {
+    color: #444;
+    margin: 0;
+    display: inline-block;
+    }
+
+    .commentBox {
+    padding: 10px;
+    border-top: 1px dotted #bbb;
+    }
+
+    .commentBox .form-group:first-child, .actionBox .form-group:first-child {
+    width: 80%;
+    }
+
+    .commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
+    width: 18%;
+    }
+
+    .actionBox .form-group * {
+    width: 100%;
+    }
+
+    .taskDescription {
+    margin-top: 10px 0;
+    }
+
+    .commentList {
+    padding: 0;
+    list-style: none;
+    max-height: 200px;
+    overflow: auto;
+    }
+
+    .commentList li {
+    margin: 0;
+    margin-top: 10px;
+    }
+
+    .commentList li > div {
+    display: table-cell;
+    }
+
+    .commenterImage {
+    width: 30px;
+    margin-right: 5px;
+    height: 100%;
+    float: left;
+    }
+
+    .commenterImage img {
+    width: 100%;
+    border-radius: 50%;
+    }
+
+    .commentText p {
+    margin: 0;
+    }
+
+    .sub-text {
+    color: #aaa;
+    font-family: verdana;
+    font-size: 11px;
+    }
+
+    .actionBox {
+    border-top: 1px dotted #bbb;
+    padding: 10px;
+    }
+
+
+</code></pre>
+
+        @*Html kod*@
+        <p class="lead">
+            <a class="btn btn-lg btn-secondary fw-bold border-white bg-white">HTML </a>
+        </p>
+        <pre><code class="language-html">
+
+    &lt;div class="detailBox">
+    &lt;div class="titleBox">
+    &lt;label>Yorum Kutusu&lt;/label>
+    &lt;button type="button" class="close" aria-hidden="true">&times;&lt;/button>
+    &lt;/div>
+    &lt;div class="commentBox">
+
+    &lt;/div>
+    &lt;div class="actionBox">
+    &lt;ul id="CommentsUl" class="commentList">
+    &lt;/ul>
+
+
+    &lt;form id="CommentForm" class="form-inline" role="form">
+
+    &lt;div class="form-group">
+    &lt;input name="Name" id="Name" class="form-control" type="text" placeholder="Yorum Yapan" />
+    &lt;/div>
+    &lt;br />
+
+
+    &lt;div class="form-group">
+    &lt;label for="exampleFormControlTextarea2">Yorum Yapın...&lt;/label>
+    &lt;textarea class="form-control rounded-0" name="CommentArea" id="CommentArea" rows="3" placeholder="Yorum Yaz">&lt;/textarea>
+    &lt;/div>
+
+    &lt;hr />
+    &lt;button type="submit" class="btn btn-default">Gönder&lt;/button>
+    &lt;/form>
+    &lt;/div>
+    &lt;/div>
+
+        </code></pre>
+
+        @*Js kod*@
+        <p class="lead">
+            <a class="btn btn-lg btn-secondary fw-bold border-white bg-white">JS </a>
+        </p>
+        <pre><code class="language-javascript">
+
+    GetComments();
+
+    function GetComments() {
+    var html = [];
+
+    $.getJSON("https://localhost:44378/api/Comment/Get", function (data) {
+
+
+    $.each(data, function (key, value) {
+    html.push(
+
+    "&lt;li> &lt;div class='commentText'> &lt;p class=''>" + value.Comment + "&lt;/p> &lt;span class='date sub-text'>gönderen " + value.Name + "&lt;/span>&lt;/div>&lt;/li>"
+    
+    );
+    });
+
+    $("#CommentsUl").empty().append(html);
+
+    });
+    }
+
+    $("#CommentForm").submit(function (event) {
+
+    //sayfa post back olmasın --ajax ile gidecek bilgiler
+    event.preventDefault();
+
+    $.ajax({
+    url: "https://localhost:44378/api/Comment/Post",
+    data: {
+    Name: $("#Name").val(),
+    Comment: $("#CommentArea").val()
+    },
+    type: "POST",
+    complete: function () {
+
+    GetComments();
+    alert("yorumunuz alındı");
+
+    },
+    success: function () {
+
+    }
+    });
+
+    });
+
+
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </main>
+    </div>
+
